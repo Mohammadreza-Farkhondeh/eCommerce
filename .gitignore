@@ -1,8 +1,12 @@
 # Environment
 venv/
 .env
+.idea
 
 # cache
 .pytest_cache
 **__pycache__/
+
+# DB
+ecommerce/db.sqlite3
 
