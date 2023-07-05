@@ -1,9 +1,14 @@
 from pathlib import Path
+from datetime import timedelta
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-tlwz_#_f06%15sr*ls&lhm6iqx&g88ej6_%^=@(*y8ueon1n9&'
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 DEBUG = True
 
@@ -18,7 +23,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
+    'rest_framework',
+     
     # Third-party apps
 
     # Internal apps
@@ -87,6 +93,11 @@ REST_FRAMEWORK = {
     ]
 }
 
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),
+    "UPDATE_LAST_LOGIN": True,
+
+}
 
 # Internationalization
 LANGUAGE_CODE = 'en-us'
