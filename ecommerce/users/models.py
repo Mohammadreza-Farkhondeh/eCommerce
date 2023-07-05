@@ -5,6 +5,9 @@ from django.contrib.auth.models import (
 from django.utils.crypto import get_random_string
 from django.db.models import EmailField, BooleanField
 
+# TODO: create profile model with oneToOne relationship with UserAccount for saving user information such as name, address ...
+# TODO: use django signals to create profile after UserAccount created
+
 
 class UserAccountManager(BaseUserManager):
     """
