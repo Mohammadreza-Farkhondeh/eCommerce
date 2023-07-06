@@ -5,6 +5,8 @@ from rest_framework import status, permissions
 from rest_framework.decorators import permission_classes
 from .serializers import UserCreateSerializer, UserSerializer
 
+# TODO: switch to ViewSet
+
 
 class UserView(APIView):
     """
