@@ -1,4 +1,6 @@
 from django.db import models
+from .managers import ProductManager
+from autoslug import AutoSlugField
 
 
 def product_directory_path(instance, filename):
@@ -11,16 +13,26 @@ def product_directory_path_head(instance, filename):
 
 class Category(models.Model):
     """
-    Category model for products category
+    Category model for product category
     can be and have parent category
     """
     name = models.CharField(max_length=50)
+    slug = AutoSlugField(populate_from=lambda instance: instance.get_full_name(),
+                         unique=True, unique_with="parent", always_update=True)
 
     # TODO: replace models.ForeignKey with mptt.TreeForeignKey to have more flexibility
     parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return self.name
+
+    def get_full_name(self):
+        # if the category has a parent, prepend the parent name
+        if self.parent:
+            return f"{self.parent.name} - {self.name}"
+        # otherwise, return only the name
+        else:
+            return self.name
 
 
 class Product(models.Model):
@@ -42,4 +54,5 @@ class Product(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
-    category = models.ForeignKey('category', on_delete=models.SET_NULL, null=True, blank=True)
+    category = models.ForeignKey('category', on_delete=models.SET_NULL, null=True, blank=True, related_name="products")
+    objects = ProductManager()
