@@ -1,7 +1,7 @@
 from django.db import models
 from .managers import ProductManager
 from autoslug import AutoSlugField
-
+from django.utils.crypto import get_random_string
 
 def product_directory_path(instance, filename):
     # Images will be uploaded to MEDIA_ROOT/product_<id>/<filename>
@@ -25,10 +25,8 @@ class Category(models.Model):
     """
 
     name = models.CharField(max_length=50)
-
-    # slug = models.SlugField(default= self.get_full_name())
-    AutoSlugField(populate_from=get_slug,
-                  unique=True, unique_with="parent", always_update=True, null=True)
+    slug = AutoSlugField(populate_from=get_slug,
+                        unique=True, unique_with="parent", always_update=True, null=True)
 
     # TODO: replace models.ForeignKey with mptt.TreeForeignKey to have more flexibility
     parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
@@ -47,6 +45,11 @@ class Product(models.Model):
     slug = models.SlugField(max_length=32, unique=True)
     price = models.PositiveIntegerField()
     image = models.ImageField(upload_to=product_directory_path_head)
+
+    def save(self, *args, **kwargs):
+        if not self.slug:  # if the slug is not set
+            self.slug = get_random_string(8, '0123456789')  # generate a random slug of 8 digits
+        super().save(*args, **kwargs)  # call the save method of the parent class
 
     # TODO: replace with ckeditor.fields.RichTextField
     description = models.TextField()

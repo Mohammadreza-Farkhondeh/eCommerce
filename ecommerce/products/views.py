@@ -13,6 +13,7 @@ class ProductViewSet(ModelViewSet):
     """
     permission_classes = [IsGrantedOrReadOnlyProduct, ]
     queryset = Product.objects.all()
+    lookup_field = "slug"
 
     # Define a dictionary of serializers for different actions
     serializers = {
@@ -44,12 +45,12 @@ class CategoryViewSet(ViewSet):
         serializer = CategorySerializer(queryset, many=True)
         return Response(serializer.data, status.HTTP_200_OK)
 
-    def retrieve(self, request, pk=None):
+    def retrieve(self, request, slug=None):
         """
         get products in a Category
         """
         # get the category by its primary key
-        category = get_object_or_404(Category, pk=pk)
+        category = get_object_or_404(Category, slug=slug)
         # serialize the category
         category_serializer = CategorySerializer(category)
         # get the products of the category or any of its subcategories
@@ -83,12 +84,12 @@ class CategoryViewSet(ViewSet):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def update(self, request, pk=None):
+    def update(self, request, slug=None):
         """
         Update an existed Category
         """
         # get the category to update by its primary key
-        category = get_object_or_404(Category, pk=pk)
+        category = get_object_or_404(Category, slug=slug)
         # update the category with the request data
         serializer = CategorySerializer(category, data=request.data)
         # validate the data and save the category
@@ -99,12 +100,12 @@ class CategoryViewSet(ViewSet):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def partial_update(self, request, pk=None):
+    def partial_update(self, request, slug=None):
         """
         Update a Category
         """
         # get the category to update by its primary key
-        category = get_object_or_404(Category, pk=pk)
+        category = get_object_or_404(Category, slug=slug)
         # update the category with the partial request data
         serializer = CategorySerializer(category, data=request.data, partial=True)
         # validate the data and save the category
@@ -115,12 +116,12 @@ class CategoryViewSet(ViewSet):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def destroy(self, request, pk=None):
+    def destroy(self, request, slug=None):
         """
         Delete a Category
         """
         # get the category to delete by its primary key
-        category = get_object_or_404(Category, pk=pk)
+        category = get_object_or_404(Category, slug=slug)
         # delete the category
         category.delete()
         # return a success response
