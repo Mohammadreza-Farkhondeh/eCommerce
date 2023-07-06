@@ -10,6 +10,10 @@ def product_directory_path_head(instance, filename):
 
 
 class Category(models.Model):
+    """
+    Category model for products category
+    can be and have parent category
+    """
     name = models.CharField(max_length=50)
 
     # TODO: replace models.ForeignKey with mptt.TreeForeignKey to have more flexibility
@@ -20,6 +24,11 @@ class Category(models.Model):
 
 
 class Product(models.Model):
+    """
+    Product model
+    each may have category or not
+    two fields Image and Images, Image for list page and Images for detail page
+    """
     name = models.CharField(max_length=128)
     slug = models.SlugField(max_length=32, unique=True)
     price = models.PositiveIntegerField()
