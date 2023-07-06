@@ -7,19 +7,19 @@ from rest_framework import permissions
 product_content_type = ContentType.objects.get_for_model(Product)
 
 # Get the permission for adding products
-add_permission = Permission.objects.get(
+add_permission, _ = Permission.objects.get_or_create(
     content_type=product_content_type,
-    codename="add_product",
+    codename="products.add_product",
 )
 # Get the permission for changing products
-change_permission = Permission.objects.get(
+change_permission, _ = Permission.objects.get_or_create(
     content_type=product_content_type,
-    codename="change_product",
+    codename="products.change_product",
 )
 # Get the permission for deleting products
-delete_permission = Permission.objects.get(
+delete_permission, _ = Permission.objects.get_or_create(
     content_type=product_content_type,
-    codename="delete_product",
+    codename="products.delete_product",
 )
 
 

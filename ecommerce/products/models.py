@@ -9,6 +9,13 @@ def product_directory_path(instance, filename):
 def product_directory_path_head(instance, filename):
     # Head image will be uploaded to MEDIA_ROOT/product_<id>/head-<filename>
     return f'product-{instance.profile.id}/head-{filename}'
+def get_slug(instance):
+    # if the category has a parent, prepend the parent name
+    if instance.parent:
+        return f"{instance.parent.name} - {instance.name}"
+    # otherwise, return only the name
+    else:
+        return instance.name
 
 
 class Category(models.Model):
@@ -16,23 +23,18 @@ class Category(models.Model):
     Category model for product category
     can be and have parent category
     """
+
     name = models.CharField(max_length=50)
-    slug = AutoSlugField(populate_from=lambda instance: instance.get_full_name(),
-                         unique=True, unique_with="parent", always_update=True)
+
+    # slug = models.SlugField(default= self.get_full_name())
+    AutoSlugField(populate_from=get_slug,
+                  unique=True, unique_with="parent", always_update=True, null=True)
 
     # TODO: replace models.ForeignKey with mptt.TreeForeignKey to have more flexibility
     parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return self.name
-
-    def get_full_name(self):
-        # if the category has a parent, prepend the parent name
-        if self.parent:
-            return f"{self.parent.name} - {self.name}"
-        # otherwise, return only the name
-        else:
-            return self.name
 
 
 class Product(models.Model):

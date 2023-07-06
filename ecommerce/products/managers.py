@@ -1,4 +1,4 @@
-1from django.db.models import Manager
+from django.db.models import Manager
 
 
 class ProductManager(Manager):
