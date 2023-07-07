@@ -33,8 +33,12 @@ class CartViewSet(ViewSet):
         # serialize them with the CartItemSerializer
         serializer = CartItemSerializer(queryset, many=True)
         # return a response with the serialized data
+        try:
+            total =Cart.objects.filter(user=request.user).first().total
+        except:
+            total = 0
         data = {
-            'total': Cart.objects.filter(user=request.user).total,
+            'total': total,
             'items': serializer.data
         }
         return Response(data)

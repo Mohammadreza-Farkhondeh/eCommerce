@@ -27,6 +27,9 @@ services:
       - RABBITMQ_DEFAULT_VHOST=vhost
     networks:
       - eCommerceNetwork
+    ports:
+      - "5672:5672"
+      - "15672:15672"
 
 volumes:
   result_backend_data:
