@@ -1,0 +1,36 @@
+version: '3'
+
+services:
+  result_backend:
+    image: redis:6.2-alpine
+    ports:
+      - "6379:6379"
+    command: ["redis-server", "--save", "20 1", "--loglevel", "warning", "--requirepass", "${REDIS_RESULT_BACKEND_PASSWORD}", "--databases", "1"]
+    volumes:
+      - result_backend_data:/data
+    networks:
+      - eCommerceNetwork
+
+  cache:
+    image: redis:6.2-alpine
+    ports:
+      - "6380:6380"
+    command: ["redis-server", "--requirepass", "${REDIS_CACHE_PASSWORD}", "--port", "6380", "--databases", "2"]
+    networks:
+      - eCommerceNetwork
+
+  broker:
+    image: rabbitmq:3.9-management-alpine
+    environment:
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}
+      - RABBITMQ_DEFAULT_VHOST=vhost
+    networks:
+      - eCommerceNetwork
+
+volumes:
+  result_backend_data:
+    external: true
+networks:
+  eCommerceNetwork:
+    external: true
