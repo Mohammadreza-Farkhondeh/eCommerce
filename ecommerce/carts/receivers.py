@@ -17,7 +17,7 @@ def update_subtotal(sender, instance, **kwargs):
 def update_total(sender, instance, **kwargs):
     cart = instance.cart
     # sum the subtotals of all the cart items in the cart
-    cart.total = sum(cartitem.subtotal for cartitem in cart.cartitem_set.all())
+    cart.total = sum(int(cartitem.subtotal) for cartitem in cart.cartitem_set.all())
     # save the cart
     cart.save()
 

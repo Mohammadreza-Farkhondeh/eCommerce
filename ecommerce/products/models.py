@@ -53,7 +53,6 @@ class Product(models.Model):
 
     # TODO: replace with ckeditor.fields.RichTextField
     description = models.TextField()
-    images = models.ImageField(upload_to=product_directory_path)
 
     is_available = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True)
@@ -61,3 +60,8 @@ class Product(models.Model):
 
     category = models.ForeignKey('category', on_delete=models.SET_NULL, null=True, blank=True, related_name="products")
     objects = ProductManager()
+
+
+class ProductImages(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to=product_directory_path)

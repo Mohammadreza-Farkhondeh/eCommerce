@@ -21,7 +21,7 @@ class CartViewSet(ViewSet):
 
     def get_product(self):
         data = self.request.data
-        product = Product.objects.get_object_or_404(slug=data.get('slug'))
+        product = get_object_or_404(Product, slug=data.get('slug'))
         return product
 
     def list(self, request):
