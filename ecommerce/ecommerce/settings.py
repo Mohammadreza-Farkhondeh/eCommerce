@@ -1,6 +1,7 @@
 from pathlib import Path
 from datetime import timedelta
 from dotenv import load_dotenv
+import logging.config
 import os
 
 load_dotenv()
@@ -10,9 +11,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -66,16 +67,22 @@ WSGI_APPLICATION = 'ecommerce.wsgi.application'
 # Database
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ.get('POSTGRES_DB'),
+        'USER': os.environ.get('POSTGRES_USER'),
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
+        'HOST': 'ec_db',
+        'PORT': '5432',
     }
 }
+
+
 REDIS_CACHE_PASSWORD = os.environ.get('REDIS_CACHE_PASSWORD')
 
 CACHES = {
     'default': {
         'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': f'redis://:{REDIS_CACHE_PASSWORD}@localhost:6380/1',
+        'LOCATION': f'redis://:{REDIS_CACHE_PASSWORD}@ec_cache:6380/1',
         'OPTIONS': {
             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
         }
@@ -111,9 +118,9 @@ SIMPLE_JWT = {
 }
 RABBITMQ_DEFAULT_USER = os.environ.get('RABBITMQ_DEFAULT_USER')
 RABBITMQ_DEFAULT_PASS = os.environ.get('RABBITMQ_DEFAULT_PASS')
-CELERY_BROKER_URL = f'amqp://{RABBITMQ_DEFAULT_USER}:{RABBITMQ_DEFAULT_PASS}@localhost:5672/vhost'
+CELERY_BROKER_URL = f'amqp://{RABBITMQ_DEFAULT_USER}:{RABBITMQ_DEFAULT_PASS}@ec_broker:5672/vhost'
 RESULT_BACKEND_PASSWORD = os.environ.get('REDIS_RESULT_BACKEND_PASSWORD')
-CELERY_RESULT_BACKEND = f'redis://:{RESULT_BACKEND_PASSWORD}@localhost:6379/0'
+CELERY_RESULT_BACKEND = f'redis://:{RESULT_BACKEND_PASSWORD}@ec_result_backend:6379/0'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
@@ -133,9 +140,40 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = 'static/'
 
+# Media Files
+MEDIA_ROOT = 'media/'
+MEDIA_URL = 'media/'
+
+
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # default model for authentication
 AUTH_USER_MODEL = 'users.UserAccount'
-AUTHENTICATION_BACKENDS = ['django.contrib.auth.backends.EmailBackend']
+
+# Logging Configuration
+
+# Clear prev config
+LOGGING_CONFIG = None
+LOGLEVEL = os.getenv('DJANGO_LOGLEVEL', 'info').upper()
+logging.config.dictConfig({
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'console': {
+            'format': '%(asctime)s %(levelname)s [%(name)s:%(lineno)s] %(module)s %(process)d %(thread)d %(message)s',
+        },
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'console',
+        },
+    },
+    'loggers': {
+        '': {
+            'level': LOGLEVEL,
+            'handlers': ['console',],
+        },
+    },
+})
