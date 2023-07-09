@@ -4,11 +4,11 @@ from .models import Cart, CartItem
 from django.conf import settings
 
 
-# define a signal to update the subtotal of a cart item when it is created or modified
-@receiver(signals.post_save, sender=CartItem)
+# define a signal to update the subtotal of a cart item before it is saved
+@receiver(signals.pre_save, sender=CartItem)
 def update_subtotal(sender, instance, **kwargs):
+    print(2, instance, sender)
     instance.subtotal = instance.product.price * instance.quantity
-    instance.save()
 
 
 # define a signal to update the total of a cart when a cart item is created, modified, or deleted

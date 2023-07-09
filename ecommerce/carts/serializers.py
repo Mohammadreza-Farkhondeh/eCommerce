@@ -12,7 +12,8 @@ class CartSerializer(serializers.ModelSerializer):
 class CartItemSerializer(serializers.ModelSerializer):
     # use a nested serializer to show the product details
     product = ProductListSerializer(read_only=True)
+    subtotal = serializers.DecimalField(max_digits=10, decimal_places=2, read_only=True)
 
     class Meta:
         model = CartItem
-        fields = ["product", "quantity"]
+        fields = ["product", "quantity", "subtotal"]
