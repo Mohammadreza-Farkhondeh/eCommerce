@@ -50,8 +50,54 @@ class CartViewSetTestCase(APITestCase):
         self.assertEqual(response.data["items"][0]["quantity"], 1)
 
     def test_create_cart_item_normal(self):
-        response = self.client.post("/api/cart/", {'slug': self.product2.slug, 'quantity': 1})
+        response = self.client.post("/api/cart/", {'product': {'slug': self.product2.slug}}, format='json')
         print(response.data)
         self.assertEqual(response.status_code, 201)
-        self.assertEqual(response.data["product"], ProductListSerializer(self.product))
+        self.assertEqual(response.data["product"]['slug'], self.product2.slug)
+        self.assertEqual(response.data["product"]['price'], self.product2.price)
         self.assertEqual(response.data["quantity"], 1)
+        self.assertEqual(float(response.data['subtotal']), self.product2.price)
+
+    def test_create_cart_item_exist(self):
+        response = self.client.post("/api/cart/", {'product': {'slug': self.product.slug}}, format='json')
+        print(response.data)
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.data["product"]['slug'], self.product.slug)
+        self.assertEqual(response.data["product"]['price'], self.product.price)
+        self.assertEqual(response.data["quantity"], 2)
+        self.assertEqual(float(response.data['subtotal']), self.product.price)
+
+    def test_create_cart_product_unavailable(self):
+        self.product.is_available = False
+        self.product.save()
+        response = self.client.post("/api/cart/", {'product': {'slug': self.product.slug}}, format='json')
+        print(response.data)
+        self.assertEqual(response.status_code, 400)
+
+    def test_update_cart_item_normal(self):
+        response = self.client.patch(f"/api/cart/{self.product.slug}/", {'quantity': 5})
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data["product"]['slug'], self.product.slug)
+        self.assertEqual(response.data["product"]['price'], self.product.price)
+        self.assertEqual(response.data["quantity"], 5)
+
+    def test_update_cart_item_bad_quantity(self):
+        print(f"api/cart/{self.product.slug}")
+        response = self.client.patch(f"/api/cart/{self.product.slug}/", {})
+        print(response)
+        self.assertEqual(response.status_code, 400)
+
+    def test_delete_Cart_item(self):
+        response = self.client.delete(f"/api/cart/{self.product.slug}/")
+
+        self.assertEqual(response.status_code, 204)
+        cart_item = CartItem.objects.filter(product=self.product).first()
+        self.assertIsNone(cart_item)
+
+    def test_delete_Cart_item_not_exist(self):
+        response = self.client.delete(f"/api/cart/{self.product.slug}aaa/")
+
+        self.assertEqual(response.status_code, 404)
+        cart_item = CartItem.objects.filter(product=self.product).first()
+        self.assertIsNotNone(cart_item)

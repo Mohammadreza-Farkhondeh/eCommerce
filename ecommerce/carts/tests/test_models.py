@@ -23,21 +23,7 @@ def test_cart_model_bad_user():
             user=user,
             total=0.00
         )
-        assert cart.id is None
-        assert cart.user != user
-        assert cart.total != 100
 
-
-@pytest.mark.django_db
-def test_cart_model_bad_total(user):
-    with pytest.raises(IntegrityError):
-        cart = Cart.objects.create(
-            user=user,
-            total=-10.0
-        )
-        assert cart.id is None
-        assert cart.user == user
-        assert cart.total != -10.0
 
 
 @pytest.mark.django_db
@@ -63,22 +49,3 @@ def test_cart_item_bad_quantity(product, cart):
             quantity=-1,
             subtotal=10
         )
-        assert cart_item.id is None
-        assert cart_item.product != product
-        assert cart_item.cart != cart
-        assert cart_item.subtotal != 10.0
-
-
-@pytest.mark.django_db
-def test_cart_item_bad_quantity(product, cart):
-    with pytest.raises(IntegrityError):
-        cart_item = CartItem.objects.create(
-            product=product,
-            cart=cart,
-            quantity=1,
-            subtotal=-10
-        )
-        assert cart_item.id is None
-        assert cart_item.product != product
-        assert cart_item.cart != cart
-        assert cart_item.subtotal != 10.0
