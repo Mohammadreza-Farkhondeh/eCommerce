@@ -1,6 +1,0 @@
-[run]
-omit =
-    *_fixtures.py
-    *_tests.py
-    *_testconf.py
-    conftest.py
