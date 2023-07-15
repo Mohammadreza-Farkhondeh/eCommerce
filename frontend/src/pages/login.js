@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
-import { useHistory, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import Cookies from "js-cookie";
 
 function LoginForm() {
@@ -13,8 +13,8 @@ function LoginForm() {
     const [password, setPassword] = useState("");
     const [error, setError] = useState(null);
 
-    // Use history hook to navigate to other pages
-    const history = useHistory();
+    // Use Navigate hook to navigate to other pages
+    const navigate = useNavigate();
 
     // Handle the form submission
     const handleSubmit = async (e) => {
@@ -28,7 +28,7 @@ function LoginForm() {
             axios.defaults.headers.common["Authorization"] =
                 "Bearer " + response.data.access;
             // Redirect to the home page
-            history.push("/");
+            navigate("/");
         } catch (err) {
             // If error, set the error state to display the message
             setError(err.response.data.message);
