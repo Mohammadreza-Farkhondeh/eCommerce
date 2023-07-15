@@ -1,15 +1,12 @@
 FROM python:3.9
 
-ENV PYTHONUNBUFFERED=1
-
-
 COPY ./requirements.txt /requirements.txt
 
 
 RUN pip install --upgrade pip \
-    && pip install -r /requirements.txt
+    && pip install -r /requirements.txt \
+    && mkdir /ecommerce
 
-RUN mkdir /ecommerce
 COPY . /ecommerce
 WORKDIR /ecommerce
 

@@ -1,6 +1,6 @@
 # Environment
-venv/
-ecommerce/.env
+backend/venv/
+.env
 .idea
 
 # cache
@@ -8,5 +8,4 @@ ecommerce/.env
 **__pycache__/
 
 # DB
-ecommerce/db.sqlite3
-
+backend/db.sqlite3
