@@ -1,18 +1,20 @@
 import './App.css';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import LoginForm from "./pages/login";
 import SignupForm from "./pages/signup"
 
 function App() {
-  return (
+return (
     <Router>
-      <div className="app">
-        <h1>My App</h1>
-        <Routes>
-          <Route path="/signup" element={<SignupForm />} />
-        </Routes>
-      </div>
+        <div className="app">
+            <h1>My App</h1>
+            <Routes>
+                <Route path="/login" element={<LoginForm />} />
+                <Route path="/signup" element={<SignupForm />} />
+            </Routes>
+        </div>
     </Router>
-  );
+    );
 }
 
 export default App;
