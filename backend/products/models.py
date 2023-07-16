@@ -39,8 +39,7 @@ class Product(models.Model):
     """
     Product model
     each may have category or not
-    two fields Image and Images, Image for list page and Images for detail page
-    """
+   """
     name = models.CharField(max_length=128)
     slug = models.SlugField(max_length=32, unique=True)
     price = models.PositiveIntegerField()

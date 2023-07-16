@@ -27,6 +27,8 @@ INSTALLED_APPS = [
      
     # Third-party apps
     'rest_framework',
+    'django_filters',
+
     # Internal apps
     'users',
     'products',
@@ -109,7 +111,12 @@ AUTH_PASSWORD_VALIDATORS = [
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ]
+    ],
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.DjangoFilterBackend'
+    ],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 3
 }
 
 SIMPLE_JWT = {

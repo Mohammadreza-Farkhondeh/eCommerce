@@ -1,5 +1,5 @@
 from rest_framework.serializers import ModelSerializer, ImageField, SlugField
-from .models import Product, Category
+from .models import Product, Category, ProductImages
 
 # TODO: replace ModelSerializer with HyperlinkedModelSerializer
 
@@ -13,24 +13,39 @@ class ProductListSerializer(ModelSerializer):
         fields = ['name', 'slug', 'price', 'image']
 
 
+class ProductImageSerializer(ModelSerializer):
+    class Meta:
+        model = ProductImages
+        fields = "__all__"
+
+
 class ProductDetailSerializer(ModelSerializer):
     """
     serializer for actions other than list
     """
-    image = ImageField(use_url=True)  # or False so only give relative url
+    images = ProductImageSerializer(many=True)
 
     class Meta:
         model = Product
-        fields = "__all__"
+        fields = ["name", "slug", "price", "description", "is_available", "images"]
 
 
-class CategorySerializer(ModelSerializer):
+class CategoryListSerializer(ModelSerializer):
     """
-    serializer for actions on Category
+    serializer for list action
     """
-    slug = SlugField(read_only=True)
+    class Meta:
+        model = Category
+        fields = ['name', 'slug', 'parent']
+
+
+class CategoryDetailSerializer(ModelSerializer):
+    """
+    serializer for actions other than list
+    """
+    products = ProductListSerializer(many=True, read_only=True)
+    subcategories = CategoryListSerializer(many=True, read_only=True)
 
     class Meta:
         model = Category
-        fields = ["name", "slug"]
-        extra_kwargs = {"name": {"write_only": True}}
+        fields = ['name', 'slug', 'parent', 'products', 'subcategories']

@@ -1,6 +1,6 @@
 # Environment
 venv/
-ecommerce/.env
+.env
 .idea
 
 # cache
