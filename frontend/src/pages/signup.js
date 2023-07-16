@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import api from "../api";
 
 function SignupForm() {
     // Use state hooks to store the form data and the error message
@@ -14,7 +15,7 @@ function SignupForm() {
         e.preventDefault();
         try {
             // Send a post request to the signup endpoint with the email
-            const response = await axios.post("http://127.0.0.1:8000/api/user/", { email });
+            const response = await api.post("/api/user/", { email });
             // If successful, display a success message and redirect to the login page with the email as a state
             console.log(response);
             navigate("/login", { state: { email } });

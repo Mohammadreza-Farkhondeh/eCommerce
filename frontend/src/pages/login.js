@@ -2,6 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
 import Cookies from "js-cookie";
+import api from "../api";
 
 function LoginForm() {
     // Use location hook to get the email from the state
@@ -21,7 +22,7 @@ function LoginForm() {
         e.preventDefault();
         try {
             // Send a post request to the login endpoint with the email and password
-            const response = await axios.post("http://127.0.0.1:8000/api/user/token/", { email, password });
+            const response = await api.post("/api/user/token/", { email, password });
             // If successful, store the token pair in cookies and set the authorization header for future requests
             Cookies.set("access", response.data.access);
             Cookies.set("refresh", response.data.refresh);

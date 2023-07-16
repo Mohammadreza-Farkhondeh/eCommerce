@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 import Cookies from "js-cookie";
+// import api from "../api";
 
 function LogoutButton() {
     // Use history hook to navigate to other pages
@@ -14,7 +15,7 @@ function LogoutButton() {
         // Send a post request to the logout endpoint with the refresh token
 
         // TODO: implement logout view in backend
-        //await axios.post("http://127.0.0.1:8000/api/user/logout/", { refresh });
+        //await api.post("/api/user/logout/", { refresh });
 
 
         // If successful, remove the tokens from the cookies and clear the authorization header
