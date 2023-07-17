@@ -16,6 +16,11 @@ DEBUG = False
 ALLOWED_HOSTS = ['*']
 
 
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000" 
+    ]
+
+
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -38,6 +43,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -77,7 +83,6 @@ DATABASES = {
         'PORT': '5432',
     }
 }
-
 
 REDIS_CACHE_PASSWORD = os.environ.get('REDIS_CACHE_PASSWORD')
 

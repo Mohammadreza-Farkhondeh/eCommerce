@@ -1,0 +1,3 @@
+venv/
+.coveragerc
+carts_test_result.txt
