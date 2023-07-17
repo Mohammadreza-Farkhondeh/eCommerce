@@ -10,7 +10,7 @@ const useDeleteCartItem = () => {
   const deleteCartItem = async (slug) => {
     try {
       // make a DELETE request to /cart/{slug}/
-      await api.delete(`/cart/${slug}/`);
+      await api.delete("/api/cart/${slug}/");
       // clear any previous errors
       setError(null);
     } catch (error) {

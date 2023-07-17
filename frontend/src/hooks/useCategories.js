@@ -7,7 +7,7 @@ const useCategories = () => {
 
   const fetchCategories = async () => {
     try {
-      const response = await api.get("/category/?parent__isnull=True");
+      const response = await api.get("/api/categories/?parent__isnull=True");
       // update the state with the response data
       setCategories(response.data);
     } catch (error) {

@@ -7,7 +7,7 @@ const useCategoryDetails = (slug) => {
 
   const fetchCategoryDetails = async () => {
     try {
-      const response = await api.get("/category/${slug}/");
+      const response = await api.get("/api/categories/${slug}/");
       // update the state with the response data
       setDetails(response.data);
     } catch (error) {

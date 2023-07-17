@@ -20,7 +20,7 @@ const CategoryDropdown = ({ onSelect }) => {
   return (
     <select value={selected} onChange={handleChange}>
       <option value="">Select a category</option>
-      {categories.map((category) => (
+      {categories.results?.map((category) => (
         <option key={category.slug} value={category.slug}>
           {category.name}
         </option>

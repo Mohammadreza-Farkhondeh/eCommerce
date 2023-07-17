@@ -7,7 +7,7 @@ const useCart = () => {
 
   const fetchCart = async () => {
     try {
-      const response = await api.get("/cart/");
+      const response = await api.get("/api/cart/");
       // update the state with the response data
       setCart(response.data);
     } catch (error) {

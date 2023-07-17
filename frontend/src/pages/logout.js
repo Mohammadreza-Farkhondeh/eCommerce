@@ -1,11 +1,11 @@
 import axios from "axios";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 // import api from "../api";
 
 function LogoutButton() {
-    // Use history hook to navigate to other pages
-    const history = useHistory();
+    // Use Navigate hook to navigate to other pages
+    const navigate = useNavigate();
 
     // Handle the logout button click
     const handleLogout = async () => {
@@ -23,7 +23,7 @@ function LogoutButton() {
         Cookies.remove("refresh");
         delete axios.defaults.headers.common["Authorization"];
         // Redirect to the login page
-        history.push("/login");
+        navigate.push("/login");
     } catch (err) {
         // If error, display an alert message
         alert(err.response.data.message);

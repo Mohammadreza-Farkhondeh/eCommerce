@@ -10,7 +10,7 @@ const useUpdateCartItem = () => {
   const updateCartItem = async (slug, quantity) => {
     try {
       // make a PATCH request to /cart/{slug}/ with the quantity data
-      await api.patch(`/cart/${slug}/`, { quantity });
+      await api.patch("/api/cart/${slug}/", { quantity });
       // clear any previous errors
       setError(null);
     } catch (error) {
